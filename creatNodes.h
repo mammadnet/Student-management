@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-// #include "structure.h"
 
 courseNode *getCourseNode(){      // For creat a course node and return a pointer to point it
     courseNode *tmp;
