@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
+// #include <stdio.h>
+// #include <stdlib.h>
 
 courseNode *getCourseNode(){      // For creat a course node and return a pointer to point it
     courseNode *tmp;
@@ -37,6 +37,7 @@ profNode *getProfNode(){
     tmp=(profNode *)malloc(sizeof(profNode));
     tmp->course=NULL;
     tmp->next=NULL;
+    return tmp;
 }
 
 
