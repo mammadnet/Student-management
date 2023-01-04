@@ -16,8 +16,9 @@ typedef struct studentCourse        //-------
 typedef struct student{
     char name[20];
     char lastName[20];
-    int stdNumber;
-    int nationalCode;
+    int year;
+    int stdCode;
+    char nationalCode[12];
     stdCourseNode *course;
     struct student *next;       //Point to next student (link list structure)
 }stdNode;
