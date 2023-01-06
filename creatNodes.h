@@ -1,6 +1,3 @@
-// #include <stdio.h>
-// #include <stdlib.h>
-
 courseNode *getCourseNode(){      // For creat a course node and return a pointer to point it
     courseNode *tmp;
     tmp=(courseNode *)malloc(sizeof(courseNode));
