@@ -2,8 +2,7 @@ typedef struct courses
 {
     int code;
     char name[40];
-    int unit;         // The number of units in a course
-    int courseCode;
+    int unit;                   // The number of units in a course
     struct courses *next;       // Point to next course (link list structure)
 } courseNode;
 
@@ -32,6 +31,7 @@ typedef struct professorCourse        //-------
 typedef struct professor{
     char name[20];
     char lastName[20];
+    char nationalCode[12];
     int code;
     int courseNum;
     profCourseNode *course;
