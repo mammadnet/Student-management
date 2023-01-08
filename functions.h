@@ -63,12 +63,11 @@ void addProf(){                         // Add new professor to end of the link 
     }
 
     system("cls");
-    printf(CYNC "**Add new professor**\n" NRMC);    
+    printf(CYNC "**Add new professor**\n" NRMC);
     printf("Enter the first name:\n");
     scanf("%s", newProf->name);
     printf("Enter last name:\n");
     scanf("%s", newProf->lastName);
-    printf("Enter national code:\n");
     char ntlTmp[12];
     while(1)
     {
@@ -104,19 +103,29 @@ void addCourse(){
     while (1)
     {
         printf("Enter number of unit course:\n");
-        scanf("%d", &un);
-        if(un <= 3 && un>=1) break;
+        if(un <= 3 && un>=1 && isdigit(un)) break;
         printf(REDC "ERR->The number of units must be between 1 and 3.\n" NRMC);
     }
     newCors->unit = un;
     corsNum++;
     newCors->code=corsCodeCrtr();
     system("cls");
-    printf(GRNC "**new course was added**\n" NRMC);
+    printf(GRNC "**New course was added**\n" NRMC);
 }
+
+void showCrs(){                                     // Show saved courses
+    courseNode *p;
+    p = corsHead;
+    printf("name-> course code (unit)\n");
+    for(int i=1; i<=corsNum; i++){
+        printf(CYNC "%d) " NRMC "%8s-> " CYNC "%d" NRMC " (%d)\n", i, p->name, p->code, p->unit);
+        p = p->next;
+    }
+}
+
 //---------------------------------------------------------------------------
 
-int stdCodeCrtr(){                           // Creat a student code based on the current year 
+int stdCodeCrtr(){                           // Creat a student code based on the entry year 
     int code = curntYear()*10000+1600;
     code += stdNum;
     return code;
@@ -150,3 +159,45 @@ int checkNtnlNum(char num[]){           // Check national code number
     }
     return 0;
 }
+
+//----------------------------------------------------------------------------------------------
+
+stdNode *findStd(int code){                 // Find student by student code and return a pointer to point it
+    stdNode *p;
+    p = stdHead;
+        for(int i=0; i<stdNum; i++){
+            if(p->stdCode == code){
+                return p;
+            }
+            p = p->next;
+        }
+    return NULL;                            // Return NULL if there is no student with this profile
+}
+
+profNode *findProf(int code){               // Find professor by professor code and return a pointer to point it
+    profNode *p;
+    p = profHead;
+    for(int i=0; i<profNum; i++){
+        if(p->code == code){
+            printf("here");
+            return p;
+        }
+        p = p->next;
+    }
+    printf("here2");
+    return NULL;                            // Return 1 if there is no professor with this profile
+}
+
+courseNode *findCrs(int crsCode){           // Find course by course code and return a pointer to point it
+    courseNode *p;
+    p = corsHead;
+    for(int i=0; i<corsNum; i++){
+        if(p->code == crsCode){
+            return p;
+        }
+        p = p->next;
+    }
+    return NULL;                            // Return NULL if there is no course with this profile
+}
+
+
