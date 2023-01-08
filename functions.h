@@ -41,7 +41,7 @@ void addStudent(){         // Add new student to end of the linklist
         if(checkNtnlNum(ntlTmp)) break;
         printf(REDC "ERR->Enter the correct national code(10 digit)\n" NRMC);
     }
-    strcpy(newStd->nationalCode, ntlTmp);
+    strcpy(newStd->idCode, ntlTmp);
     stdNum++;
     newStd->stdCode = stdCodeCrtr();
     system("cls");
@@ -76,7 +76,7 @@ void addProf(){                         // Add new professor to end of the link 
         if(checkNtnlNum(ntlTmp)) break;
         printf(REDC "ERR->Enter the correct national code(10 digit)\n" NRMC);
     }
-    strcpy(newProf->nationalCode, ntlTmp);
+    strcpy(newProf->idCode, ntlTmp);
     profNum++;                                  
     newProf->code = profCodeCrtr();
     system("cls");
@@ -103,7 +103,8 @@ void addCourse(){
     while (1)
     {
         printf("Enter number of unit course:\n");
-        if(un <= 3 && un>=1 && isdigit(un)) break;
+        scanf("%d", &un);
+        if(un <= 3 && un>=1) break;
         printf(REDC "ERR->The number of units must be between 1 and 3.\n" NRMC);
     }
     newCors->unit = un;
