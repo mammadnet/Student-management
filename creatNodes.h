@@ -8,6 +8,7 @@ courseNode *getCourseNode(){      // For creat a course node and return a pointe
 stdNode *getStdNode(){
     stdNode *tmp;
     tmp = (stdNode *)malloc(sizeof(stdNode));
+    tmp->units=0;
     tmp->next=NULL;
     return tmp;
 }
@@ -16,6 +17,7 @@ stdNode *getStdNode(){
 profNode *getProfNode(){
     profNode *tmp;
     tmp=(profNode *)malloc(sizeof(profNode));
+    tmp->courseNum=0;
     tmp->next=NULL;
     return tmp;
 }
