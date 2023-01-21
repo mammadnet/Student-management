@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <conio.h>
 
 #include "structure.h"
 #include "creatNodes.h"
@@ -15,14 +16,7 @@ stdNode *stdLogin();
 
 
 int main(){
-    // addCourse();
-    // addCourse();
-    // addCourse();
-    // addCourse();
-    // showCrs();
-    addStudent();
-    printf("%d\n", stdHead->stdCode);
-    printf("%s\n", stdHead->idCode);
+    system("cls");
     mainMenu();
 }
 
@@ -32,10 +26,10 @@ void mainMenu(){
         printf(CYNC "1)" NRMC " Login Student\n");
         printf(CYNC "2)" NRMC " Login Admin\n");
         printf(CYNC "3)" NRMC " exit\n");
-        char choc;
-        getchar();
-        choc = getchar();
-        switch (choc)
+        char choice;
+        choice = getchar();
+        choice = choice=='\n' ? getchar() : choice;
+        switch (choice)
         {
         case '1':
             stdMenu();
@@ -52,10 +46,12 @@ void mainMenu(){
         }
     }
 }
-
-void stdMenu(){
+//-----------------------------------Elements of main menu----------------------------
+void stdMenu(){                                     // Menu for student panel
     int finish;
-    if(stdLogin() != NULL){
+    stdNode *std;
+    std = stdLogin();
+    if(std != NULL){
         finish =1;
     }else{
         printf(REDC "**Back to menu**\n" NRMC);
@@ -63,27 +59,27 @@ void stdMenu(){
     }
 
     while(finish){
-        printf(CYNC "1)" NRMC " Add course\n");
-        printf(CYNC "2)" NRMC " Delete course\n");
-        printf(CYNC "3)" NRMC " List of courses taken\n");
-        printf(CYNC "4)" NRMC " List of all courses\n");
-        printf(CYNC "5)" NRMC " Back to main menu\n");
-        char choc;
-        choc = getchar();
-        getchar();
-        switch (choc)
+        printf(CYNC "1) " NRMC "Take course\n");
+        printf(CYNC "2) " NRMC "Delete course\n");
+        printf(CYNC "3) " NRMC "List of courses taken\n");
+        printf(CYNC "4) " NRMC "List of all courses\n");
+        printf(CYNC "5) " NRMC "Back to main menu\n");
+        char choice;
+        choice = getchar();
+        choice = choice=='\n' ? getchar() : choice;
+        switch (choice)
         {
         case '1':
-            /* code */
+            takeStdCourse(std);
             break;
         case '2':
             /* code */
             break;
         case '3':
-            /* code */
+            showStdcrs(std);
             break;
         case '4':
-            /* code */
+            showAllCrs();
             break;
         case '5':
             finish = 0;                                         // Break the loop and finish the function operation
@@ -103,22 +99,23 @@ void adminMenu(){
         finish =0;
     }
     while(finish){
-        printf(CYNC "1)" NRMC " Student managment\n");
-        printf(CYNC "2)" NRMC " Professor managment\n");
-        printf(CYNC "3)" NRMC " Course managment\n");
-        printf(CYNC "4)" NRMC " Back to main menu\n");
-        char choc;
-        choc = getchar();                                      // Get newline
-        switch (choc)
+        printf(CYNC "1) " NRMC "Student managment\n");
+        printf(CYNC "2) " NRMC "Professor managment\n");
+        printf(CYNC "3) " NRMC "Course managment\n");
+        printf(CYNC "4) " NRMC "Back to main menu\n");
+        char choice;
+        choice = getchar();
+        choice = choice=='\n' ? getchar() : choice;
+        switch (choice)
         {
         case '1':
-            /* code */
+            stdManagMenu();
             break;
         case '2':
-            /* code */
+            profManagMenu();
             break;
         case '3':
-            /* code */
+            crsManagMenu();
             break;
         case '4':
             finish=0;
@@ -129,46 +126,109 @@ void adminMenu(){
         }
     }
 }
+//---------------------------------------------------------------------
 
-int adminLogin(){                       // Check username and password for admin login
-    char username[10]="admin";
-    char password[10]="admin123";
-    char pass[30], user[20];
-    for(int i=0; i<=3; i++){
-        printf(CYNC "Enter your username:\n" NRMC);
-        scanf("%s", user);
-        printf(CYNC "Enter your password:\n" NRMC);
-        scanf("%s", pass);
-        getchar();
-        if(strcmp(user, username) && strcmp(pass, password)){
-                printf(REDC "ERR->Invalid username or password\n" NRMC);
-        }else{
-            return 1;
+void stdManagMenu(){
+    int finish=1;
+
+    while(finish){
+    printf(CYNC "1) " NRMC "Show all students\n");
+    printf(CYNC "2) " NRMC "Student registration\n");
+    printf(CYNC "3) " NRMC "Edit student information\n");
+    printf(CYNC "4) " NRMC "Remove the student\n");
+    printf(CYNC "5) " NRMC "Back to previous menu\n");
+    char choice;
+    choice = getchar();
+    choice = choice=='\n' ? getchar() : choice;
+    switch (choice)
+    {
+        case '1':
+            showAllStd();
+            break;
+        case '2':
+            addStudent();
+            break;
+        case '3':
+            editStd();
+            break;
+        case '4':
+            removeStdQuest();
+            break;
+        case '5':
+            finish=0;
+            break;    
+        default:
+            system("cls");
+            printf(REDC "Enter the correct number\n" NRMC);
+            break;
         }
     }
-    return 0;
 }
 
-stdNode *stdLogin(){
-    stdNode *p;
-    int stdCode;
-    char ntlId[20];
-    p=findStd(stdCode);
-    for(int i=0; i<3; i++){
-        printf("Enter the student number:\n");
-        scanf("%d", &stdCode);
-        p= findStd(stdCode);
-        if(p==NULL){
-            printf(REDC "ERR->There is no student with this code\n" NRMC);
-            continue;
+void profManagMenu(){
+    int finish=1;
+    char choice;
+
+    while(finish){
+    printf(CYNC "1) " NRMC "professor registration\n");
+    printf(CYNC "2) " NRMC "Edit professor information\n");
+    printf(CYNC "3) " NRMC "Remove the professor\n");
+    printf(CYNC "4) " NRMC "Back to previous menu\n");
+    choice = getchar();
+    choice = choice=='\n' ? getchar() : choice;
+    switch (choice)
+        {
+        case '1':
+            addProf();
+            break;
+        case '2':
+            editProf();
+            break;
+        case '3':
+            removeProfQuest();
+            break;
+        case '4':
+            finish=0;
+            break;    
+        default:
+            system("cls");
+            printf(REDC "Enter the correct number\n" NRMC);
+            break;
         }
-        printf("Enter the id number:\n");
-        scanf("%s", ntlId);
-        if(strcmp(ntlId, p->idCode)){
-            printf(REDC "ERR->Wrong idCode\n" NRMC);
-        }else return p;
     }
-    return NULL;
+}
+
+void crsManagMenu(){
+    int finish=1;
+
+    while(finish){
+        printf(CYNC "1) " NRMC "Add course\n");
+        printf(CYNC "2) " NRMC "Edit course information\n");
+        printf(CYNC "3) " NRMC "Remove the course\n");
+        printf(CYNC "4) " NRMC "Back to previous menu\n");
+        char choice;
+        choice = getchar();
+        choice= choice=='\n' ? getchar() : choice;
+        switch (choice)
+        {
+        case '1':
+            addCourse();
+            break;
+        case '2':
+            editCrs();
+            break;
+        case '3':
+            // code
+            break;
+        case '4':
+            finish=0;
+            break;    
+        default:
+            system("cls");
+            printf(REDC "Enter the correct number\n" NRMC);
+            break;
+        }
+    }
 }
 
 
