@@ -1,6 +1,7 @@
 courseNode *getCourseNode(){      // For creat a course node and return a pointer to point it
     courseNode *tmp;
     tmp=(courseNode *)malloc(sizeof(courseNode));
+    tmp->unit = 0;
     tmp->next=NULL;
     return tmp;
 }
@@ -8,6 +9,8 @@ courseNode *getCourseNode(){      // For creat a course node and return a pointe
 stdNode *getStdNode(){
     stdNode *tmp;
     tmp = (stdNode *)malloc(sizeof(stdNode));
+    tmp->crsNum = 0;
+    tmp->units = 0;
     tmp->units=0;
     tmp->next=NULL;
     return tmp;
