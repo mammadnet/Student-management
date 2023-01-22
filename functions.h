@@ -778,35 +778,30 @@ void takeStdCourse(stdNode *std){                   // Choosing a course by the 
     }
 }
 
-
+//----------------------------read write in file-------------------------------------
 int CrsWriteFile(){                         // Write elements of linked list to file
     courseNode *crs;
     crs=corsHead;
     FILE *file;
 
     file = fopen("course.dat", "wb");
-    if(!file){
-        return 0;
-    }else{
         fseek(file, 0*sizeof(courseNode), SEEK_SET);
         for(int i=0; i<corsNum; i++){
             fwrite(crs, sizeof(courseNode), 1, file);
             crs=crs->next;
         }
-    }
     fclose(file);
 }
 
 int crsReadFile(){                     // Read courses from file and resaved to lenked list
     FILE *file;
-    courseNode *p, *node, *tmp;
+    courseNode *p, *node;
     file=fopen("course.dat", "rb");
-    node=getCourseNode();
     if(!file){
         return 0;
     }else{
+        node=getCourseNode();
         while(fread(node, sizeof(courseNode), 1, file)==1){
-            printf("->%d\n", node);
             if(corsHead == NULL){
                 corsHead = node;
                 p = corsHead;
@@ -818,6 +813,71 @@ int crsReadFile(){                     // Read courses from file and resaved to 
             corsNum++;
         }
     }
+    fclose(file);
     showAllCrs();
 }
 
+int stdWriteFile(){
+    stdNode *std;
+    FILE *file;
+    std = stdHead;
+    file=fopen("student.bin", "wb");
+    fseek(file, 0*sizeof(stdNode), SEEK_SET);
+    for(int i=0; i<corsNum; i++){
+        fwrite(std, sizeof(stdNode), 1, file);
+        std = std->next;
+    }
+    fclose(file);
+}
+
+int stdReadFile(){
+    stdNode *p, *node;
+    FILE *file;
+
+    file=fopen("student.bin", "wb");
+
+    if(!file){
+        return 0;
+    }else{
+        node=getStdNode();
+        while (fread(node, sizeof(stdNode), 1, file)==1){
+            if(stdHead == NULL){
+                stdHead = node;
+                p=stdHead;
+            }else{
+                p->next = node;
+                p = p->next;
+            }
+            stdNum++;
+        }
+    }
+}
+
+void profWriteFile(){
+    profNode *std;
+    FILE *file;
+    std = stdHead;
+    file=fopen("professor.bin", "wb");
+    fseek(file, 0*sizeof(profNode), SEEK_SET);
+    for(int i; i<profNum; i++){
+        fwrite(std, sizeof(profNode), 1, file);
+        std = std->next;
+    }
+}
+
+int profReadFile(){
+    profNode *p, *node;
+    FILE *file;
+    node = getProfNode();
+    while (fread(node, sizeof(profNode), 1, file)){
+        if(profHead == NULL){
+            profHead = node;
+            p = profHead;
+        }else{
+            p->next=node;
+            p = p->next;
+        }
+        node=getProfNode();
+        profNum++;
+    }
+}
