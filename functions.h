@@ -1,4 +1,4 @@
-
+// Colors for show information in console
 #define NRMC  "\x1B[0m"             // Normal color (White)
 #define REDC  "\e[0;31m"            // Red color
 #define GRNC  "\e[0;32m"            // Green color
@@ -12,6 +12,7 @@
 #define BYLWC "\e[1;33m"            // Bold Yellow color
 #define BBLUC "\e[1;34m"            // Bold Blue color
 #define BPRPC "\e[1;35m"            // Bold Purple color
+//------------------------------------------------------------- 5
 
 int stdNum=0;                   // Number of students
 int profNum=0;                  // Number of professors
@@ -181,9 +182,7 @@ void showAllCrs(){                                     // Show all saved courses
     printf("\n");
 }
 
-void showCrs(int code){                      // Show one course by course code
-        courseNode *crs;
-        crs = findCrs(code);
+void showCrs(courseNode *crs){                      // Show one course
         printf(YLWC "Name" PRPC "->" NRMC "%s\n", crs->name);
         printf(YLWC "Code" PRPC "->" NRMC "%d\n", crs->code);
         printf(YLWC "Unit" PRPC "->" NRMC "%d\n", crs->unit);
@@ -193,7 +192,8 @@ void showCrs(int code){                      // Show one course by course code
 void showStdcrs(stdNode *std){                      // Show the lessons taken by the student
     courseNode *crs;
     for(int i=0; i<std->crsNum; i++){
-        showCrs(std->crsCode[i]);
+        crs = findCrs(std->crsCode[i]);
+        showCrs(crs);
     }
 
 }
@@ -479,24 +479,41 @@ void removeStdQuest(){                          // Get approval to remove a stud
     int code;
     char choice;
     stdNode *p;
-    printf(CYNC "Enter the student code: " CYNC);
-    scanf("%d", &code);
-    p=findStd(code);
-    showStd(p);
-    printf("here\n");
-    while(choice !='y' || choice != 'n'){
-        printf(REDC "do you want to remove this student?(y of n)\n" NRMC);
-        choice = getchar();
-        choice = choice=='\n' ? getchar() : choice;
-        if(choice == 'y'){
-            printf("here2\n");
-            removeStd(code);
-            printf("here3\n");
-            printf(REDC "**Student was deleted**\n" NRMC);
-            break;
-        }else if (choice == 'n')
-        {
-            printf(REDC "Delete operation was cancelled\n" NRMC);
+
+    for(int i=0; i<3; i++){
+        printf(CYNC "Enter the student code: " NRMC);
+        scanf("%d", &code);
+        p=findStd(code);
+        if(p==NULL){
+            printf(REDC"ERR->This professor code was not found\n");
+            continue;
+        }else{
+            showStd(p);
+            while(choice !='y' || choice != 'n'){
+                printf(YLWC "do you want to remove this student?(y of n)\n" CYNC);
+                choice = getchar();
+                choice = choice=='\n' ? getchar() : choice;
+                switch (choice)
+                {
+                case 'y':
+                    removeStd(code);
+                    system("cls");
+                    printf(REDC "*** Student was deleted ***\n\n");
+                    printf("Press any key to continue...\n");
+                    getch();
+                    system("cls");
+                    break;
+                case 'n':
+                    system("cls");
+                    printf(REDC "Delete operation was cancelled\n\n" NRMC);
+                    printf("Press any key to continue...\n");
+                    getch();
+                    system("cls");
+                default:
+                    printf(REDC "ERR->Please Enter 'y' or 'n'\n" NRMC);
+                    break;
+                }
+            }
             break;
         }
     }
@@ -525,31 +542,118 @@ void removeStd(int code){
     }
 }
 
+void removeTakenCourseQuest(stdNode *std){
+    stdNode *student;
+    student = std;
+    int code;
+    showStdcrs(student);
+    for(int i=0;i<3; i++){
+        printf(YLWC "Enter the course code do you want to delete: " PRPC);
+        scanf("%d", &code);
+        if(checkTakenCrs(student, code) == 0){
+            printf(REDC "You didn't get this course\n");
+            continue;
+        }else{
+            courseNode *crs;
+            crs = findCrs(code);
+            showCrs(crs);
+            char choice;
+            while (choice != 'y' && choice != 'n'){
+                printf(YLWC "Do you want to delete this course(y or n)?\n");
+                choice = getchar();
+                choice = choice=='\n' ? getchar() : choice;
+                switch (choice)
+                {
+                case 'y':
+                    removeTakenCourse(student, code);
+                    system("cls");
+                    printf(REDC "***Course was deleted***\n\n");
+                    printf("Press any key to continue...\n");
+                    getch();
+                    system("cls");
+                    break;
+                case 'n':
+                    system("cls");
+                    printf(REDC "***Delete operation was canceled***\n\n"NRMC);
+                    printf("Press any key to continue...\n");
+                    getch();
+                    system("cls");
+                    break;
+                default:
+                    printf(REDC "Pleas enter 'y' or 'n'\n" NRMC);
+                    break;
+                }
+            }
+            break;
+        }
+    }
+}
+
+int checkTakenCrs(stdNode *std, int code){
+    for(int i=0; i<std->crsNum; i++){
+        if(std->crsCode[i] == code){
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void removeTakenCourse(stdNode *std, int code){                     // Delete taken course 
+    int pos;
+    for(int i=0; i<std->crsNum; i++){
+        printf("i -> %d\n", i);
+        if(code == std->crsCode[i]){
+            pos = i;
+            for(int j=pos; j<std->crsNum-1; j++){
+                printf("j -> %d\n", j);
+                std->crsCode[j] = std->crsCode[j+1];                // Delete course code from list of taken courses
+            }
+            std->crsNum--;
+            break;
+        }
+    }
+}
+
 void removeProfQuest(){                                     // Get approval to remove a professor
     profNode *p;
     char choice;
     int code;
-    
-    printf(CYNC "Enter the professor code: " CYNC);
-    scanf("%d", &code);
-    p=findProf(code);
-    showProf(p);
-
-    while(choice !='y' || choice != 'n'){
-        printf(REDC "Do you want to remove this professor?(y of n)\n" NRMC);
-        scanf("%c", &choice);
-        switch (choice)
-        {
-        case 'y':
-            removeProf(code);
-            printf(REDC "**Professor was deleted**\n" NRMC);
-            break;
-        case 'n':
-            printf(REDC "Delete operation was cancelled\n" NRMC);
-            break;
-        default:
-            printf(REDC "ERR->Enter the currect number\n" NRMC);
-            break;
+    for(int i=0; i<3; i++){
+        printf(CYNC "Enter the professor code: " CYNC);
+        scanf("%d", &code);
+        p=findProf(code);
+        if(p==NULL){
+            printf(REDC"ERR->This professor code was not found\n");
+            continue;
+        }else{
+            showProf(p);
+            while(choice !='y' && choice != 'n'){
+                printf(YLWC "Do you want to remove this professor?(y or n)\n" CYNC);
+                choice = getchar();
+                choice = choice=='\n' ? getchar() : choice;
+                switch (choice)
+                {
+                case 'y':
+                    removeProf(code);
+                    system("cls");
+                    printf(REDC "**Professor was deleted**\n" NRMC);
+                    printf("press any key to continue...\n");
+                    getch();
+                    system("cls");
+                    break;
+                case 'n':
+                    system("cls");
+                    printf(REDC "Delete operation was cancelled\n\n" NRMC);
+                    printf("press any key to continue...\n");
+                    getch();
+                    system("cls");
+                    break;
+                default:
+                    printf(REDC "ERR->Please Enter 'y' or 'n'\n" NRMC);
+                    break;
+                }
+            }
+            break;              // Break the for loop
         }
     }
 }
@@ -564,7 +668,7 @@ void removeProf(int profcode){
         profNum--;
     }else{
         p=profHead;
-        for(int i=0; i<profHead; i++)
+        for(int i=0; i<profNum; i++)
         previouseNode = p;
         p=p->next;
         if(p->code == profcode){
@@ -576,12 +680,89 @@ void removeProf(int profcode){
     }
 }
 
+void removeCrsQuest(){
+    int code;
+    char choice;
+    courseNode *p;
+    showAllCrs();
+    for(int i=0; i<3; i++){
+        printf(YLWC "Enter the course code: " CYNC);
+        scanf("%d", &code);
+        printf("here1\n");
+        p = findCrs(code);
+        printf("here2\n");
+        if(p==NULL){
+            printf("here3\n");
+            printf(REDC"ERR->This course code was not found\n");
+            continue;
+        }else{
+            printf("here4\n");
+            showCrs(p);
+            printf("here5\n");
+            printf(YLWC "Do you want to delete this course(y or n)?\n" PRPC);
+            while (choice !='y' && choice != 'n'){
+                choice = getchar();
+                choice = choice=='\n' ? getchar() : choice;
+                switch (choice)
+                {
+                case 'y':
+                    printf("here6\n");
+                    removeCrs(code);
+                    printf("here7\n");
+                    printf(REDC "** Course was deleted **\n" NRMC);
+                    break;
+                case 'n':
+                    printf(REDC "Delete operation was cancelled\n" NRMC);
+                    break;
+                default:
+                    printf(REDC "ERR->Please Enter 'y' or 'n'\n" NRMC);
+                    break;
+                }
+            }
+            break;                          // Break the for loop
+        }
+    }   
+}
+
+void removeCrs(int crsCode){
+    courseNode *p, *previouseNode, *remvNode;
+
+    if(corsHead->code == crsCode){
+        remvNode = corsHead;
+        corsHead = corsHead->next;
+        corsNum--;
+    }else{
+        p=corsHead;
+        for(int i=0; i<corsNum; i++){
+            previouseNode = p;
+            p=p->next;
+            if(p->code == crsCode){
+                remvNode = p;
+                previouseNode->next = p->next;
+                free(remvNode);
+                corsNum--;
+            }
+        }
+    }
+
+// Remove course code from all students
+
+    stdNode *ps;
+    ps = stdHead;
+    for(int i=0; i<stdNum; i++){                    
+        printf("here8\n");
+        removeTakenCourse(ps, crsCode);
+        ps->units -= remvNode->unit;
+        ps = ps->next;
+    }
+    free(remvNode);
+}
+
 void takeStdCourse(stdNode *std){                   // Choosing a course by the student
     courseNode *crs;
     int code;
 
-    while (1)
-    {
+    while (1){
         showAllCrs();
         printf(YLWC "Enter the course code <or Enter 0 for back to the menu>: " CYNC);
         scanf("%d", &code);
@@ -592,8 +773,46 @@ void takeStdCourse(stdNode *std){                   // Choosing a course by the 
         }else{
             std->crsCode[std->crsNum] = code;
             std->crsNum = std->crsNum +1;
+            std->units += crs->unit;
         }
     }
 }
 
 
+int CrsWriteFile(){                         // Write elements of linked list to file
+    courseNode *crs;
+    crs=corsHead;
+    FILE *file;
+
+    file = fopen("course.dat", "wb");
+    if(!file){
+        return 0;
+    }else{
+        fseek(file, 0*sizeof(courseNode), SEEK_SET);
+        for(int i=0; i<corsNum; i++){
+            fwrite(crs, sizeof(courseNode), 1, file);
+            crs=crs->next;
+        }
+    }
+    fclose(file);
+}
+
+void crsReadFile(){                     // Read courses from file and resaved to lenked list
+    FILE *file;
+    courseNode *p, *node, *tmp;
+    file=fopen("course.dat", "rb");
+    node=getCourseNode();
+    while(fread(node, sizeof(courseNode), 1, file)==1){
+        printf("->%d\n", node);
+        if(corsHead == NULL){
+            corsHead = node;
+            p = corsHead;
+        }else{
+            p->next = node;
+            p=p->next;
+        }
+        node=getCourseNode();
+        corsNum++;
+    }
+    showAllCrs();
+}
