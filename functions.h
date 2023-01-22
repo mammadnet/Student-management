@@ -797,22 +797,27 @@ int CrsWriteFile(){                         // Write elements of linked list to 
     fclose(file);
 }
 
-void crsReadFile(){                     // Read courses from file and resaved to lenked list
+int crsReadFile(){                     // Read courses from file and resaved to lenked list
     FILE *file;
     courseNode *p, *node, *tmp;
     file=fopen("course.dat", "rb");
     node=getCourseNode();
-    while(fread(node, sizeof(courseNode), 1, file)==1){
-        printf("->%d\n", node);
-        if(corsHead == NULL){
-            corsHead = node;
-            p = corsHead;
-        }else{
-            p->next = node;
-            p=p->next;
+    if(!file){
+        return 0;
+    }else{
+        while(fread(node, sizeof(courseNode), 1, file)==1){
+            printf("->%d\n", node);
+            if(corsHead == NULL){
+                corsHead = node;
+                p = corsHead;
+            }else{
+                p->next = node;
+                p=p->next;
+            }
+            node=getCourseNode();
+            corsNum++;
         }
-        node=getCourseNode();
-        corsNum++;
     }
     showAllCrs();
 }
+
