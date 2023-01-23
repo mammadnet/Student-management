@@ -1,3 +1,7 @@
+#include <stdlib.h>
+#include <windows.h>
+
+
 // Colors for show information in console
 #define NRMC  "\x1B[0m"             // Normal color (White)
 #define REDC  "\e[0;31m"            // Red color
@@ -12,7 +16,9 @@
 #define BYLWC "\e[1;33m"            // Bold Yellow color
 #define BBLUC "\e[1;34m"            // Bold Blue color
 #define BPRPC "\e[1;35m"            // Bold Purple color
-//------------------------------------------------------------- 5
+//------------------------------------------------------------- 
+#define MVLT "\033[1D"              // Move curser left 1 column 
+
 
 int stdNum=0;                   // Number of students
 int profNum=0;                  // Number of professors
@@ -21,6 +27,12 @@ stdNode *stdHead=NULL;          // First element of student link list
 profNode *profHead=NULL;        // First element of professor link list
 courseNode *corsHead=NULL;      // First element of course link list
 
+void delay(unsigned int sec){                           // create delay in program
+    unsigned int timeout = time(0) + sec;
+    while (time(0) < timeout);
+}
+
+//-----------------------------add members of university-----------------------------------
 
 void addStudent(){         // Add new student to end of the linklist
     stdNode *p, *newStd;
@@ -745,9 +757,7 @@ void removeCrs(int crsCode){
         }
     }
 
-// Remove course code from all students
-
-    stdNode *ps;
+    stdNode *ps;                    // Remove course code from all students
     ps = stdHead;
     for(int i=0; i<stdNum; i++){                    
         printf("here8\n");
@@ -761,7 +771,6 @@ void removeCrs(int crsCode){
 void takeStdCourse(stdNode *std){                   // Choosing a course by the student
     courseNode *crs;
     int code;
-
     while (1){
         showAllCrs();
         printf(YLWC "Enter the course code <or Enter 0 for back to the menu>: " CYNC);
@@ -814,28 +823,34 @@ int crsReadFile(){                     // Read courses from file and resaved to 
         }
     }
     fclose(file);
-    showAllCrs();
+    p->next = NULL;
 }
 
 int stdWriteFile(){
     stdNode *std;
     FILE *file;
     std = stdHead;
+    printf("here01\n");
     file=fopen("student.bin", "wb");
+    printf("here02\n");
     fseek(file, 0*sizeof(stdNode), SEEK_SET);
-    for(int i=0; i<corsNum; i++){
+    printf("here03\n");
+    for(int i=0; i<stdNum; i++){
+        printf("cors is %d", corsNum);
+        printf("here04\n");
         fwrite(std, sizeof(stdNode), 1, file);
+        printf("here05\n");
         std = std->next;
+        printf("here06\n");
     }
+    printf("here07\n");
     fclose(file);
 }
 
 int stdReadFile(){
     stdNode *p, *node;
     FILE *file;
-
-    file=fopen("student.bin", "wb");
-
+    file=fopen("student.bin", "rb");
     if(!file){
         return 0;
     }else{
@@ -848,9 +863,12 @@ int stdReadFile(){
                 p->next = node;
                 p = p->next;
             }
+            node=getStdNode();
             stdNum++;
+            p->next = NULL;
         }
     }
+    fclose(file);
 }
 
 void profWriteFile(){
@@ -863,6 +881,7 @@ void profWriteFile(){
         fwrite(std, sizeof(profNode), 1, file);
         std = std->next;
     }
+    fclose(file);
 }
 
 int profReadFile(){
@@ -879,5 +898,27 @@ int profReadFile(){
         }
         node=getProfNode();
         profNum++;
+        p->next = NULL;
     }
+    fclose(file);
+}
+
+void readFile(){
+    system("cls");
+    printf(BGRNC "-->Read database<--\n");
+    Sleep(600);
+    for(int i=0; i<20; i++){
+        printf(BGRNC "==" BREDC ">");
+        Sleep(60);
+        printf(MVLT);
+    }
+    printf("\n");
+    crsReadFile();
+    stdReadFile();
+    profReadFile();
+    Sleep(400);
+    system("cls");
+    printf(BGRNC "**COMPLET**" NRMC);
+    Sleep(800);
+    system("cls");
 }
