@@ -310,6 +310,28 @@ stdNode *stdLogin(){                        // Find student by student number an
     return NULL;                            
 }
 
+profNode *profLogin(){                                      // Get professor code and national code and checking the user's eligibility to enter
+    profNode *prof;
+    int profCode;
+    char ntlId[20];                                        // professor national code
+    for(int i=0; i<3; i++){
+        printf(YLWC "Enter professor number: \n" PRPC);
+        scanf("%d", &profCode);
+        prof = findProf(profCode);
+        if(prof == NULL){
+            printf(REDC "ERR->There is no professor with this code\n" NRMC);
+            continue;
+        }
+        printf("Enter the national Number:\n");
+        scanf("%s", ntlId);
+        if(strcpy(ntlId, prof->idCode)){
+            printf(REDC "ERR->Wrong idCode\n" NRMC);
+        }else return prof;
+    }                                         
+}
+
+
+
 int adminLogin(){                       // Check username and password for admin login
     char username[10]="admin";
     char password[10]="admin123";
