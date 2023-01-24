@@ -322,12 +322,13 @@ profNode *profLogin(){                                      // Get professor cod
             printf(REDC "ERR->There is no professor with this code\n" NRMC);
             continue;
         }
-        printf("Enter the national Number:\n");
+        printf(YLWC "Enter the national Number:\n");
         scanf("%s", ntlId);
-        if(strcpy(ntlId, prof->idCode)){
+        if(strcmp(ntlId, prof->idCode)){
             printf(REDC "ERR->Wrong idCode\n" NRMC);
         }else return prof;
-    }                                         
+    }
+    return NULL;                    
 }
 
 
@@ -952,7 +953,7 @@ void readFile(){                                // Read all data from file and s
     system("cls");
     printf(BGRNC "-->Read database<--\n");
     Sleep(600);
-    for(int i=0; i<20; i++){                    // Progress bar
+    for(int i=0; i<15; i++){                    // Progress bar
         printf(BGRNC "--" BREDC ">");
         Sleep(60);
         printf(MVLT);                           // Move curser to left
