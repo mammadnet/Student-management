@@ -16,13 +16,16 @@ stdNode *stdLogin();
 
 
 int main(){
-    system("cls");
+    readFile();
     mainMenu();
+    CrsWriteFile();
+
 }
 
 void mainMenu(){
     while (1)
     {
+        system("cls");
         printf(CYNC "1)" NRMC " Login Student\n");
         printf(CYNC "2)" NRMC " Login Admin\n");
         printf(CYNC "3)" NRMC " exit\n");
@@ -46,12 +49,14 @@ void mainMenu(){
         }
     }
 }
-//-----------------------------------Elements of main menu----------------------------
+//-----------------------------------Elements of main menu------------------------------
 void stdMenu(){                                     // Menu for student panel
     int finish;
     stdNode *std;
+    system("cls");
     std = stdLogin();
     if(std != NULL){
+        system("cls");
         finish =1;
     }else{
         printf(REDC "**Back to menu**\n" NRMC);
@@ -73,13 +78,14 @@ void stdMenu(){                                     // Menu for student panel
             takeStdCourse(std);
             break;
         case '2':
-            /* code */
+            removeTakenCourseQuest(std);
             break;
         case '3':
             showStdcrs(std);
             break;
         case '4':
             showAllCrs();
+            pressAnyKey();
             break;
         case '5':
             finish = 0;                                         // Break the loop and finish the function operation
@@ -93,12 +99,14 @@ void stdMenu(){                                     // Menu for student panel
 
 void adminMenu(){
     int finish;
+    system("cls");
     if(adminLogin()){
         finish = 1;
     }else{
         finish =0;
     }
     while(finish){
+        system("cls");
         printf(CYNC "1) " NRMC "Student managment\n");
         printf(CYNC "2) " NRMC "Professor managment\n");
         printf(CYNC "3) " NRMC "Course managment\n");
@@ -130,7 +138,7 @@ void adminMenu(){
 
 void stdManagMenu(){
     int finish=1;
-
+    system("cls");
     while(finish){
     printf(CYNC "1) " NRMC "Show all students\n");
     printf(CYNC "2) " NRMC "Student registration\n");
@@ -168,12 +176,13 @@ void stdManagMenu(){
 void profManagMenu(){
     int finish=1;
     char choice;
-
+    system("cls");
     while(finish){
     printf(CYNC "1) " NRMC "professor registration\n");
-    printf(CYNC "2) " NRMC "Edit professor information\n");
-    printf(CYNC "3) " NRMC "Remove the professor\n");
-    printf(CYNC "4) " NRMC "Back to previous menu\n");
+    printf(CYNC "2) " NRMC "Show all professor\n");
+    printf(CYNC "3) " NRMC "Edit professor information\n");
+    printf(CYNC "4) " NRMC "Remove the professor\n");
+    printf(CYNC "5) " NRMC "Back to previous menu\n");
     choice = getchar();
     choice = choice=='\n' ? getchar() : choice;
     switch (choice)
@@ -182,12 +191,15 @@ void profManagMenu(){
             addProf();
             break;
         case '2':
-            editProf();
+            ShowAllProf();
             break;
         case '3':
-            removeProfQuest();
+            editCrs();
             break;
         case '4':
+            removeProfQuest();
+            break;
+        case '5':
             finish=0;
             break;    
         default:
@@ -200,12 +212,13 @@ void profManagMenu(){
 
 void crsManagMenu(){
     int finish=1;
-
+    system("cls");
     while(finish){
         printf(CYNC "1) " NRMC "Add course\n");
-        printf(CYNC "2) " NRMC "Edit course information\n");
-        printf(CYNC "3) " NRMC "Remove the course\n");
-        printf(CYNC "4) " NRMC "Back to previous menu\n");
+        printf(CYNC "2) " NRMC "Show all course\n");
+        printf(CYNC "3) " NRMC "Edit course information\n");
+        printf(CYNC "4) " NRMC "Remove the course\n");
+        printf(CYNC "5) " NRMC "Back to previous menu\n");
         char choice;
         choice = getchar();
         choice= choice=='\n' ? getchar() : choice;
@@ -215,12 +228,16 @@ void crsManagMenu(){
             addCourse();
             break;
         case '2':
-            editCrs();
+            showAllCrs();
+            pressAnyKey();
             break;
         case '3':
-            // code
+            editCrs();
             break;
         case '4':
+            removeCrsQuest();
+            break;
+        case '5':
             finish=0;
             break;    
         default:
@@ -230,5 +247,7 @@ void crsManagMenu(){
         }
     }
 }
+
+
 
 
