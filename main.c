@@ -27,8 +27,9 @@ void mainMenu(){
     {
         system("cls");
         printf(CYNC "1)" NRMC " Login Student\n");
-        printf(CYNC "2)" NRMC " Login Admin\n");
-        printf(CYNC "3)" NRMC " exit\n");
+        printf(CYNC "2)" NRMC " Login Professor\n");
+        printf(CYNC "3)" NRMC " Login Admin\n");
+        printf(CYNC "4)" NRMC " exit\n");
         char choice;
         choice = getchar();
         choice = choice=='\n' ? getchar() : choice;
@@ -38,9 +39,12 @@ void mainMenu(){
             stdMenu();
             break;
         case '2':
-            adminMenu();
+            profMenu();
             break;
         case '3':
+            adminMenu();
+            break;
+        case '4':
             exit(0);
             break;
         default:
@@ -124,13 +128,13 @@ void profMenu(){
             switch (choice)
             {
                 case '1':
-                    // code
+                    takeProfCrs(prof);
                     break;
                 case '2':
                     // code
                     break;
                 case '3':
-                    // code
+                    showProfTakenCrs(prof);
                     break;
                 case '4':
                     showAllCrs();
