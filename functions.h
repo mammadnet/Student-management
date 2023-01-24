@@ -18,7 +18,7 @@
 #define BPRPC "\e[1;35m"            // Bold Purple color
 //------------------------------------------------------------- 
 #define MVLT "\033[1D"              // Move curser left 1 column 
-
+//-------------------------------------------------------------
 
 int stdNum=0;                   // Number of students
 int profNum=0;                  // Number of professors
@@ -27,9 +27,11 @@ stdNode *stdHead=NULL;          // First element of student link list
 profNode *profHead=NULL;        // First element of professor link list
 courseNode *corsHead=NULL;      // First element of course link list
 
-void delay(unsigned int sec){                           // create delay in program
-    unsigned int timeout = time(0) + sec;
-    while (time(0) < timeout);
+void pressAnyKey(){
+    printf("\n");
+    printf("Press any key to continue...");
+    getch();
+    system("cls");
 }
 
 //-----------------------------add members of university-----------------------------------
@@ -56,7 +58,6 @@ void addStudent(){         // Add new student to end of the linklist
     scanf("%s", newStd->lastName);
     printf(YLWC "Enter the year of birth:\n" CYNC);
     scanf("%d", &newStd->year);
-    
     getchar();
     char ntlTmp[12];
     while(1)
@@ -69,11 +70,10 @@ void addStudent(){         // Add new student to end of the linklist
     strcpy(newStd->idCode, ntlTmp);
     stdNum++;
     newStd->stdCode = stdCodeCrtr();
+    stdWriteFile();
     system("cls");
     printf(GRNC "****New student was added****\n\n" NRMC);
-    printf("Press any key for continue...\n");
-    getch();
-    system("cls");
+    pressAnyKey();
 }
 
 void addProf(){                         // Add new professor to end of the link list
@@ -105,11 +105,11 @@ void addProf(){                         // Add new professor to end of the link 
     strcpy(newProf->idCode, ntlTmp);
     profNum++;                                  
     newProf->code = profCodeCrtr();
+    printf("slkfjdkl");
+    profWriteFile();
     system("cls");
     printf(GRNC "**New professor was added**\n\n\n" NRMC);
-    printf("press any key for continue...");
-    getch();
-    system("cls");
+    pressAnyKey();
 }
 
 void addCourse(){                           // Add a course to program
@@ -138,11 +138,10 @@ void addCourse(){                           // Add a course to program
     newCors->unit = un;
     corsNum++;
     newCors->code=corsCodeCrtr();
+    CrsWriteFile();
     system("cls");
     printf(GRNC "**New course was added**\n\n" NRMC);
-    printf("press any key for continue...\n");
-    getch();
-    system("cls");
+    pressAnyKey();
 }
 //-----------------------------------------------------------
 
@@ -191,7 +190,6 @@ void showAllCrs(){                                     // Show all saved courses
         printf(CYNC "%d) " NRMC "%-8s-> " CYNC "%d" NRMC " (%d)\n", i, p->name, p->code, p->unit);
         p = p->next;
     }
-    printf("\n");
 }
 
 void showCrs(courseNode *crs){                      // Show one course
@@ -213,6 +211,7 @@ void showStdcrs(stdNode *std){                      // Show the lessons taken by
 void showAllStd(){                  // Show information of all saved students
     stdNode *p;
     p=stdHead;
+    system("cls");
     printf(BBLUC "    name\t  lastName\t   idCode\tstudent code\t    year\t geted unit\t\n");
     printf(YLWC "------------\t------------\t------------\t------------\t------------\t------------\n"NRMC);
     for(int i=0; i<stdNum; i++){
@@ -220,7 +219,7 @@ void showAllStd(){                  // Show information of all saved students
         p->name, p->lastName, p->idCode, p->stdCode, p->year, p->units);
         p = p->next;
     }
-    printf("\n");
+    pressAnyKey();
 }
 
 void showStd(stdNode *p){                         // Show information of one student
@@ -234,13 +233,14 @@ void ShowAllProf(){                     // Show information of all professors
     profNode *p;
     p=profHead;
     
-    printf("    name\t  lastName\t   idCode      professor code\t   courses\t\n");
-    printf("------------\t------------\t------------\t------------\t------------\n");
+    printf(BBLUC "    name\t  lastName\t   idCode      professor code\t   courses\t\n");
+    printf(YLWC "------------\t------------\t------------\t------------\t------------\n" NRMC);
     for(int i=0; i<profNum; i++){
         printf("%-11s\t%-11s\t%-11s\t%-11d\t%-11d\n",
         p->name, p->lastName, p->idCode, p->code, p->courseNum);
         p=p->next;
     }
+    pressAnyKey();
 }
 
 void showProf(profNode *p){                                     // Show information of one student
@@ -360,6 +360,8 @@ void editStd(){                                     // Edit inforamtion of stude
                 printf(CYNC "New name : " NRMC);
                 scanf("%s", tmp);
                 strcpy(p->name, tmp);
+                printf(GRNC "ID changed" NRMC);
+                pressAnyKey();
                 break;
             case '2':
                 printf(CYNC "current last Name is %s\n" NRMC, p->lastName);
@@ -387,6 +389,7 @@ void editStd(){                                     // Edit inforamtion of stude
                 break;
         }
     }
+    stdWriteFile();
 }
 
 void editProf(){                // Edit professor inforamtion
@@ -403,32 +406,40 @@ void editProf(){                // Edit professor inforamtion
     }else finish = 1;
     while (finish)
     {
-        printf(CYNC "1)" NRMC "Edit name\n");
-        printf(CYNC "2)" NRMC "Edit last name\n");
-        printf(CYNC "3)" NRMC "Edit id code\n");
-        printf(CYNC "4)" NRMC "Back to previous menu\n");
+        printf(CYNC "1) " NRMC "Edit name\n");
+        printf(CYNC "2) " NRMC "Edit last name\n");
+        printf(CYNC "3) " NRMC "Edit id code\n");
+        printf(CYNC "4) " NRMC "Back to previous menu\n");
 
         choice = getchar();
         choice = choice=='\n' ? getchar() : choice;
         switch (choice)
         {
         case '1':
+            system("cls");
             printf(CYNC "current name is " PRPC "%s\n" NRMC, p->name);
             printf(CYNC "New name: " NRMC);
             scanf("%s", tmp);
             strcpy(p->name, tmp);
+            printf(GRNC "Name changed" NRMC);
+            pressAnyKey();
             break;
         case '2':
+        system("cls");
             printf(CYNC "current last name is " PRPC "%s\n" NRMC, p->lastName);
             printf(CYNC "New last name: " NRMC);
             scanf("%s", tmp);
             strcpy(p->lastName, tmp);
+            printf(GRNC "Name changed" NRMC);
+            pressAnyKey();
             break;
         case '3':
             printf(CYNC "current id is " PRPC "%s\n" NRMC, p->name);
             printf(CYNC "New id code: " NRMC);
             scanf("%s", tmp);
             strcpy(p->idCode, tmp);
+            printf(GRNC "ID changed" NRMC);
+            pressAnyKey();
             break;
         case '4':
             finish = 0;                             // Break the infinity loop
@@ -438,7 +449,8 @@ void editProf(){                // Edit professor inforamtion
             printf(REDC "Enter the correct number\n" NRMC);
             break;
         }
-    }   
+    }
+    profWriteFile();   
 }
 
 void editCrs(){                                     // Edit course information
@@ -461,18 +473,17 @@ void editCrs(){                                     // Edit course information
 
         choice = getchar();
         choice = choice=='\n' ? getchar() : choice;
-
         switch (choice)
         {
         case '1':
-            printf(CYNC "current name is " PRPC "%s\n" NRMC, p->name);
-            printf(CYNC "New name: " NRMC);
+            printf(YLWC "current name is " PRPC "%s\n" NRMC, p->name);
+            printf(YLWC "New name: " PRPC);
             scanf("%s", tmp);
             strcpy(p->name, tmp);
             break;
         case '2':
-            printf(CYNC "current unit is " PRPC "%d\n" NRMC, p->unit);
-            printf(CYNC "New name: " NRMC);
+            printf(YLWC "current unit is " PRPC "%d\n" NRMC, p->unit);
+            printf(YLWC "New name: " PRPC);
             scanf("%d", &p->code);
             break;
         case '3':
@@ -484,6 +495,7 @@ void editCrs(){                                     // Edit course information
             break;
         }
     }
+    CrsWriteFile();
 }
 //-------------------------------------------------
 
@@ -491,17 +503,17 @@ void removeStdQuest(){                          // Get approval to remove a stud
     int code;
     char choice;
     stdNode *p;
-
+    system("cls");
     for(int i=0; i<3; i++){
         printf(CYNC "Enter the student code: " NRMC);
         scanf("%d", &code);
         p=findStd(code);
         if(p==NULL){
-            printf(REDC"ERR->This professor code was not found\n");
+            printf(REDC"ERR->This student code was not found\n");
             continue;
         }else{
             showStd(p);
-            while(choice !='y' || choice != 'n'){
+            while(choice !='y' && choice != 'n'){
                 printf(YLWC "do you want to remove this student?(y of n)\n" CYNC);
                 choice = getchar();
                 choice = choice=='\n' ? getchar() : choice;
@@ -509,18 +521,16 @@ void removeStdQuest(){                          // Get approval to remove a stud
                 {
                 case 'y':
                     removeStd(code);
+                    stdWriteFile();
                     system("cls");
-                    printf(REDC "*** Student was deleted ***\n\n");
-                    printf("Press any key to continue...\n");
-                    getch();
-                    system("cls");
+                    printf(REDC "*** Student was deleted ***\n\n" NRMC);
+                    pressAnyKey();
                     break;
                 case 'n':
                     system("cls");
                     printf(REDC "Delete operation was cancelled\n\n" NRMC);
-                    printf("Press any key to continue...\n");
-                    getch();
-                    system("cls");
+                    pressAnyKey();
+                    break;
                 default:
                     printf(REDC "ERR->Please Enter 'y' or 'n'\n" NRMC);
                     break;
@@ -539,7 +549,6 @@ void removeStd(int code){
         free(remvNode);
         stdNum--;
     }else{
-
         p=stdHead;
         for(int i=0; i<stdNum-1; i++){
             previouseNode = p;
@@ -554,7 +563,7 @@ void removeStd(int code){
     }
 }
 
-void removeTakenCourseQuest(stdNode *std){
+void removeTakenCourseQuest(stdNode *std){                  // Get approval to remove a taken course
     stdNode *student;
     student = std;
     int code;
@@ -578,18 +587,15 @@ void removeTakenCourseQuest(stdNode *std){
                 {
                 case 'y':
                     removeTakenCourse(student, code);
+                    stdWriteFile();
                     system("cls");
                     printf(REDC "***Course was deleted***\n\n");
-                    printf("Press any key to continue...\n");
-                    getch();
-                    system("cls");
+                    pressAnyKey();
                     break;
                 case 'n':
                     system("cls");
                     printf(REDC "***Delete operation was canceled***\n\n"NRMC);
-                    printf("Press any key to continue...\n");
-                    getch();
-                    system("cls");
+                    pressAnyKey();
                     break;
                 default:
                     printf(REDC "Pleas enter 'y' or 'n'\n" NRMC);
@@ -599,15 +605,6 @@ void removeTakenCourseQuest(stdNode *std){
             break;
         }
     }
-}
-
-int checkTakenCrs(stdNode *std, int code){
-    for(int i=0; i<std->crsNum; i++){
-        if(std->crsCode[i] == code){
-            return 1;
-        }
-    }
-    return 0;
 }
 
 void removeTakenCourse(stdNode *std, int code){                     // Delete taken course 
@@ -626,10 +623,20 @@ void removeTakenCourse(stdNode *std, int code){                     // Delete ta
     }
 }
 
+int checkTakenCrs(stdNode *std, int code){
+    for(int i=0; i<std->crsNum; i++){
+        if(std->crsCode[i] == code){
+            return 1;
+        }
+    }
+    return 0;
+}
+
 void removeProfQuest(){                                     // Get approval to remove a professor
     profNode *p;
     char choice;
     int code;
+    system("cls");
     for(int i=0; i<3; i++){
         printf(CYNC "Enter the professor code: " CYNC);
         scanf("%d", &code);
@@ -647,18 +654,15 @@ void removeProfQuest(){                                     // Get approval to r
                 {
                 case 'y':
                     removeProf(code);
+                    profWriteFile();
                     system("cls");
                     printf(REDC "**Professor was deleted**\n" NRMC);
-                    printf("press any key to continue...\n");
-                    getch();
-                    system("cls");
+                    pressAnyKey();
                     break;
                 case 'n':
                     system("cls");
                     printf(REDC "Delete operation was cancelled\n\n" NRMC);
-                    printf("press any key to continue...\n");
-                    getch();
-                    system("cls");
+                    pressAnyKey();
                     break;
                 default:
                     printf(REDC "ERR->Please Enter 'y' or 'n'\n" NRMC);
@@ -672,8 +676,8 @@ void removeProfQuest(){                                     // Get approval to r
 
 void removeProf(int profcode){
     profNode *p, *previouseNode, *remvNode;
-
     if(profHead->code == profcode){
+        printf("here\n");
         remvNode = profHead;
         profHead = profHead->next;
         free(remvNode);
@@ -700,17 +704,12 @@ void removeCrsQuest(){
     for(int i=0; i<3; i++){
         printf(YLWC "Enter the course code: " CYNC);
         scanf("%d", &code);
-        printf("here1\n");
         p = findCrs(code);
-        printf("here2\n");
         if(p==NULL){
-            printf("here3\n");
             printf(REDC"ERR->This course code was not found\n");
             continue;
         }else{
-            printf("here4\n");
             showCrs(p);
-            printf("here5\n");
             printf(YLWC "Do you want to delete this course(y or n)?\n" PRPC);
             while (choice !='y' && choice != 'n'){
                 choice = getchar();
@@ -718,9 +717,9 @@ void removeCrsQuest(){
                 switch (choice)
                 {
                 case 'y':
-                    printf("here6\n");
                     removeCrs(code);
-                    printf("here7\n");
+                    CrsWriteFile();
+                    stdWriteFile();
                     printf(REDC "** Course was deleted **\n" NRMC);
                     break;
                 case 'n':
@@ -736,7 +735,7 @@ void removeCrsQuest(){
     }   
 }
 
-void removeCrs(int crsCode){
+void removeCrs(int crsCode){                                        // Delete a course from program and delete it from all of students
     courseNode *p, *previouseNode, *remvNode;
 
     if(corsHead->code == crsCode){
@@ -785,15 +784,17 @@ void takeStdCourse(stdNode *std){                   // Choosing a course by the 
             std->units += crs->unit;
         }
     }
+    stdWriteFile();
 }
 
 //----------------------------read write in file-------------------------------------
+
 int CrsWriteFile(){                         // Write elements of linked list to file
     courseNode *crs;
     crs=corsHead;
     FILE *file;
 
-    file = fopen("course.dat", "wb");
+    file = fopen("course.bin", "wb");
         fseek(file, 0*sizeof(courseNode), SEEK_SET);
         for(int i=0; i<corsNum; i++){
             fwrite(crs, sizeof(courseNode), 1, file);
@@ -805,7 +806,7 @@ int CrsWriteFile(){                         // Write elements of linked list to 
 int crsReadFile(){                     // Read courses from file and resaved to lenked list
     FILE *file;
     courseNode *p, *node;
-    file=fopen("course.dat", "rb");
+    file=fopen("course.bin", "rb");
     if(!file){
         return 0;
     }else{
@@ -830,20 +831,12 @@ int stdWriteFile(){
     stdNode *std;
     FILE *file;
     std = stdHead;
-    printf("here01\n");
     file=fopen("student.bin", "wb");
-    printf("here02\n");
     fseek(file, 0*sizeof(stdNode), SEEK_SET);
-    printf("here03\n");
     for(int i=0; i<stdNum; i++){
-        printf("cors is %d", corsNum);
-        printf("here04\n");
         fwrite(std, sizeof(stdNode), 1, file);
-        printf("here05\n");
         std = std->next;
-        printf("here06\n");
     }
-    printf("here07\n");
     fclose(file);
 }
 
@@ -871,22 +864,22 @@ int stdReadFile(){
     fclose(file);
 }
 
-void profWriteFile(){
-    profNode *std;
+void profWriteFile(){                           // Write profesors information to file
+    profNode *prof;
     FILE *file;
-    std = stdHead;
+    prof = profHead;
     file=fopen("professor.bin", "wb");
-    fseek(file, 0*sizeof(profNode), SEEK_SET);
-    for(int i; i<profNum; i++){
-        fwrite(std, sizeof(profNode), 1, file);
-        std = std->next;
+    for(int i=0; i<profNum; i++){
+        fwrite(prof, sizeof(profNode), 1, file);
+        prof = prof->next;
     }
     fclose(file);
 }
 
-int profReadFile(){
+int profReadFile(){                                 // Read professor information from file
     profNode *p, *node;
     FILE *file;
+    file = fopen("professor.bin", "rb");
     node = getProfNode();
     while (fread(node, sizeof(profNode), 1, file)){
         if(profHead == NULL){
@@ -903,14 +896,14 @@ int profReadFile(){
     fclose(file);
 }
 
-void readFile(){
+void readFile(){                                // Read all data from file and save it to linked list
     system("cls");
     printf(BGRNC "-->Read database<--\n");
     Sleep(600);
-    for(int i=0; i<20; i++){
-        printf(BGRNC "==" BREDC ">");
+    for(int i=0; i<20; i++){                    // Progress bar
+        printf(BGRNC "--" BREDC ">");
         Sleep(60);
-        printf(MVLT);
+        printf(MVLT);                           // Move curser to left
     }
     printf("\n");
     crsReadFile();
