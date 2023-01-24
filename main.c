@@ -97,6 +97,56 @@ void stdMenu(){                                     // Menu for student panel
     }
 }
 
+void profMenu(){
+    int finish;
+    profNode *prof;
+    system("cls");
+    prof=profLogin();
+    if(prof != NULL){
+        system("cls");
+        finish = 1;
+    }else{
+        printf("back to menu");
+        finish = 0;
+    }
+
+    while (finish)
+    {
+        while(finish){
+            printf(CYNC "1) " NRMC "Take course\n");
+            printf(CYNC "2) " NRMC "Delete course\n");
+            printf(CYNC "3) " NRMC "List of courses taken\n");
+            printf(CYNC "4) " NRMC "List of all courses\n");
+            printf(CYNC "5) " NRMC "Back to main menu\n");
+            char choice;
+            choice = getchar();
+            choice = choice=='\n' ? getchar() : choice;
+            switch (choice)
+            {
+                case '1':
+                    // code
+                    break;
+                case '2':
+                    // code
+                    break;
+                case '3':
+                    // code
+                    break;
+                case '4':
+                    showAllCrs();
+                    pressAnyKey();
+                    break;
+                case '5':
+                    finish = 0;                                         // Break the loop and finish the function operation
+                    break;
+                default:
+                    printf(REDC "Enter the correct number\n" NRMC);
+                    break;
+            }
+        }
+    }
+}
+
 void adminMenu(){
     int finish;
     system("cls");
