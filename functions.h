@@ -13,7 +13,6 @@
 #define BREDC "\e[1;31m"            // Bold Red color
 #define BGRNC "\e[1;32m"            // Bold Green color
 #define BCYNC "\e[1;36m"            // Bold Cyan color
-#define BYLWC "\e[1;33m"            // Bold Yellow color
 #define BBLUC "\e[1;34m"            // Bold Blue color
 #define BPRPC "\e[1;35m"            // Bold Purple color
 //------------------------------------------------------------- 
