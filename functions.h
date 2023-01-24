@@ -808,6 +808,37 @@ void takeStdCourse(stdNode *std){                   // Choosing a course by the 
     stdWriteFile();
 }
 
+void takeProfCrs(profNode *prof){
+    courseNode *crs;
+    int code;
+    while (1)
+    {
+        showAllCrs();
+        printf(YLWC "Enter the course code <or Enter 0 for back to the menu>:" CYNC);
+        scanf("%d", &code);
+        if(code == 0) break;
+        crs = findCrs(code);
+        if(crs == NULL){
+            printf(REDC "--> Course not found\n" NRMC);
+        }else{
+            prof->crsCode[prof->courseNum] = code;
+            prof->courseNum +=1;
+        }
+    }
+    profWriteFile();
+}
+
+void showProfTakenCrs(profNode *prof){
+    courseNode *crs;
+    for (int  i = 0; i < prof->courseNum; i++)
+    {
+        crs = findCrs(prof->crsCode[i]);
+        showCrs(crs);
+    }
+}
+
+
+
 //----------------------------read write in file-------------------------------------
 
 int CrsWriteFile(){                         // Write elements of linked list to file
